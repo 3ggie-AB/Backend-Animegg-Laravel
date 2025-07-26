@@ -2,8 +2,5 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return ['Laravel' => app()->version()];
-});
-
-require __DIR__.'/auth.php';
+Route::get('/', action: [App\Http\Controllers\ViewController::class, 'index'])->name('index');
+Route::post('/download', action: [App\Http\Controllers\ViewController::class, 'download'])->name('download');

@@ -9,7 +9,7 @@ class ViewController extends Controller
 {
     public function index()
     {
-        $anime = AnimeController::topAnimeSedangTayang();
+        $anime = AnimeController::topAnimeFavorite();
         return view('index', compact('anime'));
     }
     public function download()

@@ -7,6 +7,43 @@ use Illuminate\Support\Facades\Http;
 
 class AnimeController extends Controller
 {
+    public static function getAllColumns()
+    {
+        return [
+            'id',
+            'title',
+            'main_picture',
+            'alternative_titles',
+            'start_date',
+            'end_date',
+            'synopsis',
+            'mean',
+            'rank',
+            'popularity',
+            'num_list_users',
+            'num_scoring_users',
+            'nsfw',
+            'genres',
+            'created_at_api',
+            'updated_at_api',
+            'media_type',
+            'status',
+            'my_list_status',
+            'num_episodes',
+            'start_season',
+            'broadcast',
+            'source',
+            'average_episode_duration',
+            'rating',
+            'studios',
+            'pictures',
+            'background',
+            'related_anime',
+            'related_manga',
+            'recommendations',
+            'statistics',
+        ];
+    }
     public static function sendReq($url, $body)
     {
         try {
@@ -44,18 +81,27 @@ class AnimeController extends Controller
         ];
         return self::sendReq($url, $body);
     }
-    public static function allListAnime($limit = 10, $offset = 0, $search = null)
+    public static function allListAnime($limit = 10, $offset = 0, $search = null, $columns = null)
     {
         $url = "https://api.myanimelist.net/v2/anime";
         $body = [
             'limit' => $limit,
             'offset' => $offset,
+            'fields' =>  $columns,
         ];
         if ($search) {
             $body['q'] = $search;
-        }else{
-            $body['q'] = ' --';
+        } else {
+            $body['q'] = 'o';
         }
+        return self::sendReq($url, $body);
+    }
+    public static function getAnimeById($id, $columns = null)
+    {
+        $url = "https://api.myanimelist.net/v2/anime/{$id}";
+        $body = [
+            'fields' => $columns,
+        ];
         return self::sendReq($url, $body);
     }
 }

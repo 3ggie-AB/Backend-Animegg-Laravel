@@ -18,12 +18,21 @@
                                         <div class="thumb">
                                             <form id="apiForm">
                                                 <div class="mb-3">
-                                                    <label for="api-url" class="form-label">URL</label>
-                                                    <input type="text" id="api-url" name="url"
-                                                        class="form-control" readonly>
-                                                </div>
-                                                <div id="paramContainer"></div>
-                                                <button type="submit" class="btn btn-primary">Kirim</button>
+                                                    <label for="api-token" class="form-label">Token</label>
+                                                    <div class="input-group">
+                                                        <input type="text" id="api-token" name="token"
+                                                            class="form-control"
+                                                            placeholder="(otomatis terisi setelah login)">
+                                                        <button type="button" id="clear-token"
+                                                            class="btn btn-outline-secondary">Clear</button>
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="api-url" class="form-label">URL</label>
+                                                        <input type="text" id="api-url" name="url"
+                                                            class="form-control" readonly>
+                                                    </div>
+                                                    <div id="paramContainer"></div>
+                                                    <button type="submit" class="btn btn-primary">Kirim</button>
                                             </form>
                                             <hr>
                                             <div>
@@ -42,7 +51,7 @@
                                             data-method="{{ $api['method'] }}"
                                             data-params='@json($api['parameter'])'>
                                             <div class="thumb">
-                                                <img src="assets/images/video-thumb-01.png" alt="">
+                                                <img style="border-radius: 25px;" src="assets/images/video-thumb-05.png" alt="">
                                                 <div class="inner-content">
                                                     <h4>{{ $api['name'] }}</h4>
                                                     <span>{{ $api['method'] }} API</span>
@@ -54,93 +63,7 @@
                             </div>
                         </div>
                     </div>
-
-                    <script>
-                        document.addEventListener("DOMContentLoaded", function() {
-                            const menuItems = document.querySelectorAll(".api-option");
-                            const paramContainer = document.getElementById("paramContainer");
-                            const apiUrlInput = document.getElementById("api-url");
-                            const apiResponse = document.getElementById("apiResponse");
-                            const apiForm = document.getElementById("apiForm");
-
-                            menuItems.forEach(item => {
-                                item.addEventListener("click", function() {
-                                    const url = this.dataset.url;
-                                    const method = this.dataset.method;
-                                    const params = JSON.parse(this.dataset.params);
-
-                                    apiUrlInput.value = url;
-                                    apiForm.dataset.method = method;
-
-                                    // Buat parameter input
-                                    paramContainer.innerHTML = "";
-                                    params.forEach(param => {
-                                        paramContainer.innerHTML += `
-                    <div class="mb-3">
-                        <label for="${param}">${param}</label>
-                        <input type="text" class="form-control" name="${param}" placeholder="${param}">
-                    </div>
-                `;
-                                    });
-                                });
-                            });
-
-                            apiForm.addEventListener("submit", async function(e) {
-                                e.preventDefault();
-                                const url = apiUrlInput.value;
-                                const method = apiForm.dataset.method;
-                                const inputs = paramContainer.querySelectorAll("input");
-                                const data = {};
-                                const csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
-
-                                inputs.forEach(input => {
-                                    data[input.name] = input.value;
-                                });
-                                try {
-                                    const res = await fetch(url, {
-                                        method: method,
-                                        headers: {
-                                            "Content-Type": "application/json",
-                                            "Accept": "application/json",
-                                            "X-Requested-With": "XMLHttpRequest",
-                                            "X-CSRF-TOKEN": csrfToken
-                                        },
-                                        body: JSON.stringify(data)
-                                    });
-
-                                    let responseBody = {};
-                                    try {
-                                        responseBody = await res.json();
-                                    } catch (jsonErr) {
-                                        responseBody = {
-                                            error: "Respon bukan JSON yang valid"
-                                        };
-                                    }
-
-                                    const output = {
-                                        status: res.status,
-                                        ok: res.ok,
-                                        response: responseBody
-                                    };
-
-                                    console.log("API Response:", output);
-
-                                    // Tampilkan di UI
-                                    apiResponse.textContent = JSON.stringify(output, null, 2);
-                                    apiResponse.style.color = res.ok ? "green" : "red";
-
-                                } catch (err) {
-                                    apiResponse.textContent = "Network error: " + err.message;
-                                    apiResponse.style.color = "red";
-                                    console.error("Network error:", err);
-                                }
-                            });
-
-                            // Trigger klik pertama
-                            if (menuItems.length > 0) menuItems[0].click();
-                        });
-                    </script>
-
+                    @include('scriptTesting')
                 </div>
             </div>
         </div>

@@ -16,13 +16,21 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::prefix('animelist')->group(function () {
-        Route::get('/anime', [AnimeListApi::class, 'AllAnime']);
-        Route::get('/detail-anime', [AnimeListApi::class, 'getAnimeById']);
-        Route::post('/save-anime', [AnimeListApi::class, 'saveAnime']);
-        Route::post('/upload-video', [VideoUploadController::class, 'upload']);
-    });
-    Route::apiResource('anime', MyAnimeController::class)->except(['store']);
     Route::get('/video-proxy/{fileId}', [VideoUploadController::class, 'stream']);
+    Route::prefix('animelist')->group(function () {
+        Route::get('/anime', [AnimeListApi::class, 'AllAnime'])->middleware(['require.tag:admin,animelist,animelistCreate']);
+        Route::get('/detail-anime', [AnimeListApi::class, 'getAnimeById'])->middleware(['require.tag:admin,animelist,animelistDetail']);
+        Route::post('/save-anime', [AnimeListApi::class, 'saveAnime'])->middleware(['require.tag:admin,animelist,animelistSave']);
+    });
+    Route::post('/upload-video', [VideoUploadController::class, 'upload'])->middleware(['require.tag:admin,myanimeupload']);
+
+    Route::get('/anime', [MyAnimeController::class, 'index']);
+
+    Route::get('/anime/{anime}', [MyAnimeController::class, 'show']);
+
+    Route::put('/anime/{anime}', [MyAnimeController::class, 'update'])
+        ->middleware('require.tag:myanimeEdit,admin');
+    Route::delete('/anime/{anime}', [MyAnimeController::class, 'destroy'])
+        ->middleware('require.tag:myanimeDelete,admin');
 });
 

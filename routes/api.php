@@ -25,9 +25,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/upload-video', [VideoUploadController::class, 'upload'])->middleware(['require.tag:admin,myanimeupload']);
 
     Route::get('/anime', [MyAnimeController::class, 'index']);
-
     Route::get('/anime/{anime}', [MyAnimeController::class, 'show']);
-
     Route::put('/anime/{anime}', [MyAnimeController::class, 'update'])
         ->middleware('require.tag:myanimeEdit,admin');
     Route::delete('/anime/{anime}', [MyAnimeController::class, 'destroy'])

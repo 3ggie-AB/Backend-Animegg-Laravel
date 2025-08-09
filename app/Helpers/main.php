@@ -238,7 +238,118 @@ if (!function_exists('getApi')) {
                 'method' => 'DELETE',
                 'requires_token' => true,
             ],
-
+            [
+                'name' => 'List Users',
+                'url' => url('/api/users'),
+                'parameter' => [],
+                'method' => 'GET',
+                'requires_token' => true,
+                'require_tag' => ['admin', 'users', 'listUser']
+            ],
+            [
+                'name' => 'Add User',
+                'url' => url('/api/users'),
+                'parameter' => [
+                    [
+                        'name' => 'name',
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                    [
+                        'name' => 'email',
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                    [
+                        'name' => 'password',
+                        'type' => 'string',
+                        'required' => true,
+                    ],
+                    [
+                        'name' => 'profile',
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'tags',
+                        'type' => 'array',
+                        'required' => false,
+                    ],
+                ],
+                'method' => 'POST',
+                'requires_token' => true,
+                'require_tag' => ['admin', 'users', 'addUser']
+            ],
+            [
+                'name' => 'View User',
+                'url' => url('/api/users/{id}'),
+                'parameter' => [
+                    [
+                        'name' => 'id',
+                        'type' => 'integer',
+                        'required' => true,
+                        'binding' => 'id',
+                    ],
+                ],
+                'method' => 'GET',
+                'requires_token' => true,
+                'require_tag' => ['admin', 'users', 'viewUser']
+            ],
+            [
+                'name' => 'Edit User',
+                'url' => url('/api/users/{id}'),
+                'parameter' => [
+                    [
+                        'name' => 'id',
+                        'type' => 'integer',
+                        'required' => true,
+                        'binding' => 'id',
+                    ],
+                    [
+                        'name' => 'name',
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'email',
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'password',
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'profile',
+                        'type' => 'string',
+                        'required' => false,
+                    ],
+                    [
+                        'name' => 'tags',
+                        'type' => 'array',
+                        'required' => false,
+                    ],
+                ],
+                'method' => 'PUT',
+                'requires_token' => true,
+                'require_tag' => ['admin', 'users', 'editUser']
+            ],
+            [
+                'name' => 'Delete User',
+                'url' => url('/api/users/{id}'),
+                'parameter' => [
+                    [
+                        'name' => 'id',
+                        'type' => 'integer',
+                        'required' => true,
+                        'binding' => 'id',
+                    ],
+                ],
+                'method' => 'DELETE',
+                'requires_token' => true,
+                'require_tag' => ['admin', 'users', 'deleteUser']
+            ],
         ];
     }
 }

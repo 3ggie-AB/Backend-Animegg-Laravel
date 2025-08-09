@@ -8,7 +8,7 @@ class Anime extends Model
 {
     protected $table = 'animes';
     protected $guarded = [];
-    
+
     protected $casts = [
         'main_picture' => 'array',
         'alternative_titles' => 'array',
@@ -24,4 +24,9 @@ class Anime extends Model
         'start_date' => 'date',
         'end_date' => 'date'
     ];
+
+    public function videos()
+    {
+        return $this->hasMany(VideoUpload::class, 'anime_id');
+    }
 }

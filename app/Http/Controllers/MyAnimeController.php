@@ -49,10 +49,13 @@ class MyAnimeController extends Controller
     // PUT /api/anime/{id}
     public function update(AnimeRequest $request, $id)
     {
-        $anime = Anime::find($id);
+        $anime = Anime::with('videos')->find($id);
         if(!$anime) return response()->json(['message' => 'Anime tidak ditemukan'], 404);
         $anime->update($request->validated());
-        return response()->json($anime);
+        return response()->json([
+            'data' => $anime,
+            'videos' => $anime->videos
+        ]);
     }
 
     // DELETE /api/anime/{id}

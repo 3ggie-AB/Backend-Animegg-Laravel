@@ -12,6 +12,12 @@ use Illuminate\Support\Facades\Response;
 
 class VideoUploadController extends Controller
 {
+    private function getDriveId($url)
+    {
+        preg_match('/\/d\/([a-zA-Z0-9_-]+)/', $url, $matches);
+        return $matches[1] ?? null;
+    }
+
     public function upload(Request $request)
     {
         $request->validate([
@@ -33,7 +39,8 @@ class VideoUploadController extends Controller
                 'user_id' => $user->id,
                 'anime_id' => $request->anime_id,
                 'episode' => $request->episode,
-                'video_url' => $url,
+                'drive_url' => $url,
+                'video_url' => url('/api/video-proxy/' . $this->getDriveId($url)),
                 'thumbnail' => $thumbnailPath,
                 'status' => 'complete',
                 'resolution' => $request->resolution,
@@ -144,5 +151,10 @@ class VideoUploadController extends Controller
                 flush();
             }
         }, $statusCode, $headers);
+    }
+
+    public function show(VideoUpload $videoUpload)
+    {
+        return response()->json($videoUpload);
     }
 }

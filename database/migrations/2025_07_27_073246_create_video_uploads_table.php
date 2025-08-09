@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignId('anime_id')->constrained()->onDelete('cascade');
             $table->string('episode');
             $table->string('layanan')->default('Google Drive');
+            $table->string('drive_url')->nullable();
             $table->string('video_url')->nullable();
             $table->string('thumbnail')->nullable();
             $table->string('status')->default('pending');
